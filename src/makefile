@@ -6,6 +6,9 @@ INTERNAL_HEADERS=
 OBJECTS= \
 	build/obj/main.o
 
+SRCS = \
+	$(foreach x,$(OBJECTS),$(addsuffix .cc,$(basename $(notdir $(x)))))
+
 build/obj/%.o: $(addsuffix .cc,$(basename $(notdir $@)))
 	$(CXX) -c $(CXXFLAGS) -o $@ $(addsuffix .cc,$(basename $(notdir $@)))
 
@@ -22,7 +25,7 @@ full-clean: clean
 
 $(BIN_NAME): build/bin/$(BIN_NAME)
 build/bin/$(BIN_NAME): $(OBJECTS)
-	$(CXX) $(CXXFLAGS) -o build/bin/$(BIN_NAME) $(OBJECTS)
+	$(CXX) $(CXXFLAGS) -o build/bin/$(BIN_NAME) $(OBJECTS) -lsqlite3
 
 test: all
 	@build/bin/$(BIN_NAME)
